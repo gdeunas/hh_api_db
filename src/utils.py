@@ -40,17 +40,17 @@ class DBManager:
             WHERE salary_from IS NOT NULL OR salary_to IS NOT NULL;
             """
         self.cur.execute(query)
-        return self.cur.fetchone()[0]
+        result = self.cur.fetchone()
+        return result[0] if result and result[0] else 0
 
     def get_vacancies_with_higher_salary(self):
-        """получает список всех вакансий, у которых зарплата выше средней по всем вакансиям."""
-        avg_salary_tuple = self.get_avg_salary()
-        avg_salary = self.get_avg_salary()[0] if avg_salary_tuple else 0
+        """получает список всех вакансий, у которых зарплата выше средней."""
+        avg_salary = self.get_avg_salary()
         query = """
             SELECT * 
             FROM vacancies 
-            WHERE (COALESCE(salary_from, 0) + COALESCE(salary_to, 0)) / 2 > %s;"
-            """
+            WHERE (COALESCE(salary_from, 0) + COALESCE(salary_to, 0)) / 2 > %s;
+        """
         self.cur.execute(query, (avg_salary,))
         return self.cur.fetchall()
 
