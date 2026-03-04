@@ -8,42 +8,43 @@ from src.utils import DBManager
 load_dotenv()
 
 db_config = {
-    "host": os.getenv('HOST'),
+    "host": os.getenv("HOST"),
     "database": os.getenv("DATABASE"),
     "user": os.getenv("USER"),
     "password": os.getenv("PASSWORD"),
     "port": os.getenv("PORT"),
-
 }
 
 # 1.подключение и запрос данных с hh.ru
 hh = HHParser({})
 companies_list = [
-    'Яндекс',
-    'Альфа-Банк',
-    'Т-Банк',
-    'Сбербанк',
-    'МТС',
-    'VK',
-    'Газпромбанк',
-    'Ozon',
-    'Авито',
-    'Лаборатория Касперского'
+    "Яндекс",
+    "Альфа-Банк",
+    "Т-Банк",
+    "Сбербанк",
+    "МТС",
+    "VK",
+    "Газпромбанк",
+    "Ozon",
+    "Авито",
+    "Лаборатория Касперского",
 ]
 
 comp = hh.get_employers(companies_list)
 
 all_data = []
 for emp in comp:
-    emp_id = emp['id']
+    emp_id = emp["id"]
 
     vacancies = hh.get_vacancies(emp_id)
 
-    all_data.append({
-        'employer_id': emp_id,
-        'employer_name': emp['name'],
-        'vacancies': vacancies,
-    })
+    all_data.append(
+        {
+            "employer_id": emp_id,
+            "employer_name": emp["name"],
+            "vacancies": vacancies,
+        }
+    )
 
 # 2. Сохранить данные по работодателю и его вакансиям в БД
 save_to_db(all_data, db_config)
