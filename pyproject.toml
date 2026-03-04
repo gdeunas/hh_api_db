@@ -3,15 +3,28 @@ name = "hh-api-db"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "aidar"}
+    { name = "aidar" }
 ]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "psycopg2 (>=2.9.11,<3.0.0)"
+    "psycopg2 (>=2.9.11,<3.0.0)",
+    "requests (>=2.32.5,<3.0.0)",
+    "psycopg2-binary (>=2.9.11,<3.0.0)",
+    "python-dotenv (>=1.2.2,<2.0.0)"
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "isort (>=7.0.0,<8.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)",
+    "mypy (>=1.19.0,<2.0.0)",
+    "pytest (>=9.0.2,<10.0.0)",
+    "black (>=25.12.0,<26.0.0)",
+    "pytest-cov (>=7.0.0,<8.0.0)"
+]
