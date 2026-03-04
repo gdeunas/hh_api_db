@@ -2,6 +2,49 @@
 import psycopg2
 
 
+def create_database(params: dict, db_name: str | None):
+    """Создать БД и таблиц"""
+    setup_params = params.copy()
+    setup_params["database"] = "postgres"
+
+    conn = psycopg2.connect(**setup_params)
+    conn.autocommit = True
+    cur = conn.cursor()
+
+    cur.execute(f"DROP DATABASE IF EXISTS {db_name}")
+    cur.execute(f"CREATE DATABASE {db_name}")
+
+    cur.close()
+    conn.close()
+
+    params["database"] = db_name
+    conn = psycopg2.connect(**params)
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+                CREATE TABLE employers (
+                    employer_id INT PRIMARY KEY,
+                    name VARCHAR(255) NOT NULL,
+                    url TEXT
+                )
+            """
+        )
+        cur.execute(
+            """
+                CREATE TABLE vacancies (
+                    vacancy_id INT PRIMARY KEY,
+                    employer_id INT REFERENCES employers(employer_id),
+                    title VARCHAR(255) NOT NULL,
+                    salary_from INT,
+                    salary_to INT,
+                    url TEXT
+                )
+            """
+        )
+    conn.commit()
+    conn.close()
+
+
 class DBManager:
     """Класс для БД"""
 

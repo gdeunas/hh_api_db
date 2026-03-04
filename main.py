@@ -1,9 +1,10 @@
 # main.py
 import os
+
 from dotenv import load_dotenv
 
 from src.apihh import HHParser, save_to_db
-from src.utils import DBManager
+from src.utils import DBManager, create_database
 
 load_dotenv()
 
@@ -14,6 +15,8 @@ db_config = {
     "password": os.getenv("PASSWORD"),
     "port": os.getenv("PORT"),
 }
+# 0. Создать БД с таблицами
+create_database(db_config, db_config["database"])
 
 # 1.подключение и запрос данных с hh.ru
 hh = HHParser({})

@@ -1,9 +1,9 @@
 # apihhdb.py
+import time
 from typing import Any
 
 import psycopg2
 import requests
-import time
 
 
 class HHParser:
